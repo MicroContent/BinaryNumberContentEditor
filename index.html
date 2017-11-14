@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AbstactContentEditor</title>
+    <title>BinaryNumberContentEditor</title>
     <script type="application/javascript">
         function init() {
             window.data = getData();
@@ -11,20 +11,28 @@
     </script>
 </head>
 <body>
-    <div>
-        <label for="titleInput">Enter Title:</label>
-        <input id="titleInput" type="text" />
-    </div>
-    <script type="application/javascript">
-        function dataGetter() {
-            return {
-                // return data object
-                title: document.getElementById('titleInput').value
-            }
+<div>
+    <label for="numberInput">Enter Number between 0 and 255:</label>
+    <input id="numberInput" type="number"/>
+</div>
+<script type="application/javascript">
+    function dataGetter() {
+        var val = parseInt(document.getElementById('numberInput').value);
+        if (val < 0) {
+            val = Math.abs(val);
         }
+        if (val > 255) {
+            val = 255;
+        }
+        document.getElementById('numberInput').value = val;
+        return {
+            // return data object
+            number: val
+        }
+    }
 
-        init();
-        document.getElementById('titleInput').value = window.data.title;
-    </script>
+    init();
+    document.getElementById('numberInput').value = window.data.number;
+</script>
 </body>
 </html>
