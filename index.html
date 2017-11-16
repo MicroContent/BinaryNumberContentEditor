@@ -36,7 +36,9 @@
     }
 
     init();
-    document.getElementById('numberInput').value = window.data.number;
+    if (typeof window.data !== 'undefined' && typeof window.data.number == 'number') {
+        document.getElementById('numberInput').value = window.data.number;
+    }
 </script>
 </body>
 </html>
