@@ -3,19 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>BinaryNumberContentEditor</title>
-    <script type="application/javascript">
-        function init() {
-            window.data = getData();
-            setDataGetter(dataGetter)
-        }
-    </script>
+    <!-- Since GitHub Raw files use text/plain as MIME type the script cannot be executed when linking directly, instead routed over jsdelivr-->
+    <script src='https://cdn.jsdelivr.net/gh/MicroContent/BinaryNumberContentEditor/seamless.child.min.js'></script>
 </head>
 <body>
+<script type="text/javascript">
+
+    // Connect to the parent page.
+    var parent = window.seamless.connect({
+        url: window.location.url,
+        allowStyleInjection: true,
+    });
+
+
+</script>
 <div>
     <label for="numberInput">Enter Number between 0 and 255:</label>
     <input id="numberInput" type="number"/>
 </div>
+<button onclick="sendToParent(event)">
+    Send to toolkit
+</button>
 <script type="application/javascript">
+
     function dataGetter() {
         var val = parseInt(document.getElementById('numberInput').value);
         if (val < 0) {
@@ -27,6 +37,7 @@
         document.getElementById('numberInput').value = val;
         return {
             // return data object
+            type: 'toViewer',
             number: val,
             // preview metadata
             title: "Binary Representation of " + val,
@@ -34,8 +45,13 @@
             imageUrl: "https://raw.githubusercontent.com/MicroContent/BinaryNumberContentViewer/8306856c7abc9999ea07316f79e78c0d2b6468a4/example.png"
         }
     }
+    // Send a message
+    window.sendToParent = function(event) {
+        event.preventDefault();
+        var result = dataGetter()
+        parent.send(result);
+    };
 
-    init();
     if (typeof window.data !== 'undefined' && typeof window.data.number == 'number') {
         document.getElementById('numberInput').value = window.data.number;
     }
